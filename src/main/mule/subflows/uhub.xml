@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<sub-flow name="covid-cases-reports-by-state-subflow" doc:id="c79fb4f7-3903-46a7-8772-66c69bc117c5" >
+		<logger level="DEBUG" doc:name="Start Log" doc:id="a9d6857b-37b9-410e-afe1-e479007a32df" message='#["BEFORE COVID CASE REPORTS BY STATE"]' />
+		<db:select doc:name="Select Case Reports" doc:id="e5d4d6de-74a0-44a0-8aab-1b8ce470d12a" config-ref="Database_Config">
+			<db:sql><![CDATA[#["$(vars.reportsDynamicQuery)"]]]></db:sql>
+		</db:select>
+		<logger level="DEBUG" doc:name="End Log" doc:id="29ef6345-e4ae-4828-988b-29228ad60f28" message='#["COMPLETE COVID CASE REPORTS BY STATE"]' />
+	</sub-flow>
+	<sub-flow name="select-covid-case-by-natinal-id-subflow" doc:id="a42b0af5-4f16-4374-bd2f-779222ccc15b" >
+		<logger level="DEBUG" doc:name="Start Log" doc:id="427c1f8a-f002-444e-b3d2-aad8ec78ad03" message='#["BEFORE SELEST COVID CASE BY NATIONAL ID"]' />
+		<db:select doc:name="Select Case by NationalID" doc:id="048c3871-f352-48bb-8bbc-facf717194ff" config-ref="Database_Config">
+			<db:sql><![CDATA[select case_id, source, case_type, first_name, last_name, phone, email, date_of_birth, national_id, national_id_type, street_address, city, state, postal, country, create_date, update_date from cvd_case_master where national_id = :national_id]]></db:sql>
+			<db:input-parameters><![CDATA[#[{
+	national_id: vars.nationalID
+}]]]></db:input-parameters>
+		</db:select>
+		<logger level="DEBUG" doc:name="End Log" doc:id="a59e19b3-574a-4b79-922d-30f1064ce225" message='#["COMPLETE SELECT COVID CASE BY NATINAL ID"]' />
+	</sub-flow>
+	<sub-flow name="update-covid-case-subflow" doc:id="1c2bc85d-514c-45d9-9bcc-58e5f0038e67" >
+		<logger level="DEBUG" doc:name="Start Log" doc:id="1c40281d-4c39-4ade-b03e-11256e188575" message='#["BEFORE UPDATE COVID CASE"]' />
+		<db:update doc:name="Update Covid Case Master" doc:id="0940a2fd-559e-4886-9154-f2fe78ff5f67" config-ref="Database_Config">
+			<db:sql><![CDATA[update cvd_case_master set source=:source, case_type=:case_type, first_name=:first_name, last_name=:last_name, phone=:phone, email=:email, date_of_birth=TO_DATE(:date_of_birth, 'YYYY-MM-DD'), national_id=:national_id, national_id_type=:national_id_type, street_address=:street_address, city=:city, state=:state, postal=:postal, country=:country, update_date=TO_DATE(:update_date, 'YYYY-MM-DD'), create_by=:create_by, update_by=:update_by where case_id=:case_id]]></db:sql>
+			<db:input-parameters><![CDATA[#[vars.covidCasePayload]]]></db:input-parameters>
+		</db:update>
+		<logger level="DEBUG" doc:name="End Log" doc:id="4f5ce519-55ba-451b-ba59-db09d5eddc55" message='#["COMPLETE UPDATE COVID CASE"]' />
+	</sub-flow>
+	<sub-flow name="insert-covid-case-subflow" doc:id="38a74471-2740-43df-b6b5-e42e98a7db04" >
+		<logger level="DEBUG" doc:name="Start Log" doc:id="8028e9e6-395b-45a2-ab4b-07eaaff0b297" message='#["BEFORE INSERT COVID CASE"]'/>
+		<db:stored-procedure doc:id="f118226f-2ac5-4c5c-80a1-74ae11ca774f" config-ref="Database_Config" doc:name="Insert Covid Case Stored procedure">
+			<db:sql><![CDATA[{call insert_covid_master(:source, :case_type, :first_name, :last_name, :phone, :email, :date_of_birth, :national_id, :national_id_type, :street_address, :city, :state, :postal, :country, :create_date, :update_date, :create_by, :update_by, :case_id)}]]></db:sql>
+			<db:input-parameters><![CDATA[#[%dw 2.0
+output application/java
+var currentDate = now() as String { format: "YYYY-MM-dd" }
+var owner = "UHIS"
+---
+{
+	source: vars.inputPayload.source,
+	case_type: vars.inputPayload.caseType,
+	first_name: vars.inputPayload.firstName,
+	last_name: vars.inputPayload.lastName,
+	phone: vars.inputPayload.phone,
+	email: vars.inputPayload.email,
+	date_of_birth: vars.inputPayload.dateOfBirth as String { format: "YYYY-MM-dd" },
+	national_id: vars.inputPayload.nationalID,
+	national_id_type: vars.inputPayload.nationalIDType,
+	street_address: vars.inputPayload.address.streetAddress,
+	city: vars.inputPayload.address.city,
+	state: upper(vars.inputPayload.address.state),
+	postal: vars.inputPayload.address.postal,
+	country: vars.inputPayload.address.country,
+	create_date: currentDate,
+	update_date: currentDate,
+	create_by: owner,
+	update_by: owner
+}]]]></db:input-parameters>
+			<db:output-parameters>
+				<db:output-parameter key="case_id" type="NUMERIC" />
+			</db:output-parameters>
+		</db:stored-procedure>
+		<logger level="DEBUG" doc:name="End Log" doc:id="a655563d-070e-4000-b32a-aad5ccfbb26c" message='#["COMPLETE INSERT COVID CASE"]'/>
+	</sub-flow>
+</mule>

@@ -1,0 +1,13 @@
+api:
+  id: "19355379"
+
+http:
+  port: "8081"
+  
+db:
+  uhub:
+    host: "![O09jJXwkkstxmx7EuJwZLeSd+4X7EX0OgM9/gGPPWqxzrv2fhl/y9A==]"
+    port: "![MMv8wtfWzFc=]"
+    username: "useruhubdev"
+    password: "![dS1dDEkBsbuxnUMZ+bZfVQ==]"
+    service: "xe"
