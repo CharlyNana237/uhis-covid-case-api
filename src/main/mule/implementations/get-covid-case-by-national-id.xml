@@ -15,7 +15,7 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 				<ee:set-variable variableName="correlationId" ><![CDATA[attributes.headers.'x-correlation-id' default ""]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<logger level="INFO" doc:name="Start Log" doc:id="bfe80f65-1061-49de-b8fb-e89e4310d618" message='transactionID: #[vars.transactionId], correlationID: #[vars.correlationId], message: "Started get covid case by national id flow"' />
+		<logger level="INFO" doc:name="Start Log" doc:id="bfe80f65-1061-49de-b8fb-e89e4310d618" message='transactionIDCharly: #[vars.transactionId], correlationID: #[vars.correlationId], message: "Started get covid case by national id flow"' />
 		<set-variable value="#[attributes.uriParams.nationalID]" doc:name="Set nationalID" doc:id="9e2a7d13-ae7d-41bc-b55a-0a6ecd22c09e" variableName="nationalID" />
 		<flow-ref doc:name="select-covid-case-by-natinal-id-subflow" doc:id="8f5dde2a-43c1-4e6b-ba09-512698c3c5c4" name="select-covid-case-by-natinal-id-subflow" />
 		<choice doc:name="Choice" doc:id="0a928bea-9a5d-4426-89ef-185517249c73" >
