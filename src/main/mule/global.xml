@@ -20,11 +20,11 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 	<apikit:config name="uhub-sapi-config"
 		api="uhub-sapi.raml" outboundHeadersMapName="outboundHeaders"
 		httpStatusVarName="httpStatus" />
-	<!-- <db:config name="Database_Config" doc:name="Database Config" doc:id="aeeb141e-8a97-4298-b601-001f851b7a17" >
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="aeeb141e-8a97-4298-b601-001f851b7a17" >
 		<db:oracle-connection host="${secure::db.uhub.host}" user="${secure::db.uhub.username}" password="${secure::db.uhub.password}" instance="${secure::db.uhub.service}" port="${secure::db.uhub.port}">
 			<db:pooling-profile />
 		</db:oracle-connection>
-	</db:config> -->
+	</db:config>
 	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="506360bf-5833-4fa0-a058-5e8e6ec37cf2" file="test-uhub.yaml" key="amot10001" >
 		<secure-properties:encrypt algorithm="Blowfish" />
 	</secure-properties:config>

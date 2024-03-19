@@ -41,13 +41,6 @@
 									<anypoint.platform.client_secret>88008E73C7814d8590d21e7206b0a02e</anypoint.platform.client_secret>
 								</properties>
 							</cloudHubDeployment>
-
-							<sharedLibraries>
-								<sharedLibrary>
-									<groupId>com.mycompany</groupId>
-									<artifactId>ojdbc8</artifactId>
-								</sharedLibrary>
-							</sharedLibraries>
 						</configuration>
 					</plugin>
 				</plugins>
@@ -77,13 +70,6 @@
 									<anypoint.platform.client_secret>1B12d592D1c34D0b8694e14969CA4145</anypoint.platform.client_secret>
 								</properties>
 							</cloudHubDeployment>
-
-							<sharedLibraries>
-								<sharedLibrary>
-									<groupId>com.mycompany</groupId>
-									<artifactId>ojdbc8</artifactId>
-								</sharedLibrary>
-							</sharedLibraries>
 						</configuration>
 					</plugin>
 				</plugins>
@@ -117,15 +103,11 @@
 							<deploymentTimeout>3000000</deploymentTimeout>
 						</properties>
 					</cloudHubDeployment>
-
 					<sharedLibraries>
 						<sharedLibrary>
 							<groupId>com.mycompany</groupId>
 							<artifactId>ojdbc8</artifactId>
-						</sharedLibrary>
-						<sharedLibrary>
-							<groupId>com.mycompany</groupId>
-							<artifactId>ojdbc10</artifactId>
+							<version>0.1</version>
 						</sharedLibrary>
 					</sharedLibraries>
 					<classifier>mule-application</classifier>
@@ -165,11 +147,11 @@
 			<version>1.2.7</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
-		<!-- <dependency>
+		<dependency>
 			<groupId>com.mycompany</groupId>
-			<artifactId>ojdbc10</artifactId>
+			<artifactId>ojdbc8</artifactId>
 			<version>0.1</version>
-		</dependency> -->
+		</dependency>
 	</dependencies>
 
 	<repositories>
