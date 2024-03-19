@@ -165,11 +165,11 @@
 			<version>1.2.7</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.mycompany</groupId>
 			<artifactId>ojdbc10</artifactId>
 			<version>0.1</version>
-		</dependency>
+		</dependency> -->
 	</dependencies>
 
 	<repositories>
